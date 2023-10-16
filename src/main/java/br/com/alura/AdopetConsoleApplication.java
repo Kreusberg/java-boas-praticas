@@ -82,7 +82,7 @@ public class AdopetConsoleApplication {
 
         HttpClient client = HttpClient.newHttpClient();
         String uri = "http://localhost:8080/abrigos";
-        HttpResponse<String> response =  dispararRequisicaoPost(client, uri, json);
+        HttpResponse<String> response = dispararRequisicaoPost(client, uri, json);
         int statusCode = response.statusCode();
         String responseBody = response.body();
         if (statusCode == 200) {
