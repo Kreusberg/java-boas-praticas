@@ -23,7 +23,7 @@ public class AbrigoServiceTest {
     private Abrigo abrigo = new Abrigo("Teste", "61981880392", "abrigo_alura@gmail.com");
 
     @Test
-    public void deveVerificarSeDispararRequisicaoGetSeraChamado() throws IOException, InterruptedException {
+    public void deveVerificarQuandoHaAbrigo() throws IOException, InterruptedException {
         abrigo.setId(0L);
         String expectedAbrigosCadastrados = "Abrigos cadastrados:";
         String expectedIdENome = "0 - Teste";
@@ -51,7 +51,27 @@ public class AbrigoServiceTest {
         Assertions.assertEquals(expectedIdENome, actualIdENome);
     }
 
+    @Test
+    public void deveVerificarQuandoNaoHaAbrigo() throws IOException, InterruptedException {
+        abrigo.setId(0L);
+        String expected = "Não há abrigos cadastrados";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(); // Inicializa um array de bytes para pegar o retorno do Println
+        PrintStream printStream = new PrintStream(baos); // Inicializa um PrintStream para escrever no array de bytes
+        System.setOut(printStream); // Isso pegará as strings do println
+
+//      Quando este mock for chamado, então retona um array vazio, simulando um json sem dados
+        when(response.body()).thenReturn("[]");
+
+//      Quando este mock for chamado, então retorna o mock de response
+        when(client.dispararRequisicaoGet(anyString())).thenReturn(response);
+
+        abrigoService.listarAbrigo();
+
+        String[] lines = baos.toString().split(System.lineSeparator());
+        String actual = lines[0];
+
+//      Verifica se a string de expectedAbrigosCadastrados é igual a actualAbrigosCadastrados
+        Assertions.assertEquals(expected, actual);
+    }
+
 }
-
-
-
